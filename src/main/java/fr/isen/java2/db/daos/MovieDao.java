@@ -29,13 +29,16 @@ public class MovieDao {
 			                    movie.setDirector(results.getString("director"));
 			                    movie.setSummary(results.getString("summary"));
 	                    listOfMovies.add(movie);
+	                    
 	                }
+	                return listOfMovies;
 	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        return null;
 	    }
-	    return listOfMovies;
+	    
 	}
 
 	public List<Movie> listMoviesByGenre(String genreName) {
@@ -61,12 +64,14 @@ public class MovieDao {
 								results.getString("summary"));
 						listOfMovies.add(movie);
 					}
+					return listOfMovies;
 				}
 			}
 		}catch(SQLException e) {
 		        e.printStackTrace();
+		        return null;
 		}
-			return listOfMovies;
+			
 	}
 		        
         
@@ -88,13 +93,14 @@ public class MovieDao {
 	            	if (generatedKeys.next()) {
 	            		movie.setId(generatedKeys.getInt(1));
 	            	}
+	            	return movie;
 	            }
 			}
 		} catch(SQLException e) {
-			// Manage Exception
 			e.printStackTrace();
+			return null;
+		}
+		
 	}
-		return movie;
-					}
 		
 }

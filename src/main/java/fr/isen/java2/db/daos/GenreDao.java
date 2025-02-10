@@ -17,47 +17,53 @@ public class GenreDao {
 		
 		try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
 	        try (Statement statement = connection.createStatement()) {
-	            try (ResultSet results = statement.executeQuery("select * from books")) {
+	            try (ResultSet results = statement.executeQuery("select * from genre")) {
 	                while (results.next()) {
-	                    Genre genre = new Genre(results.getInt("id"),
+	                    Genre genre = new Genre(results.getInt("idgenre"),
 	                                            results.getString("name"));
 	                    listOfGenres.add(genre);
 	                }
+	                return listOfGenres;
 	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        return null;
 	    }
-	    return listOfGenres;
+	    
 	}
 
 	public Genre getGenre(String name) {
 		try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
 	        try (PreparedStatement statement = connection.prepareStatement(
-	                    "select * from movies where genre=?")) {
+	                    "select * from genre where name=?")) {
 	            statement.setString(1, name);
 	            try (ResultSet results = statement.executeQuery()) {
+	            	
 	                if (results.next()) {
-	                    return new Genre(results.getInt("id"),
+	                    return new Genre(results.getInt("idgenre"),
 	                    				 results.getString("name"));
+	                }
+	                else {
+	                	return null;
 	                }
 	            }
 	        }
 	    } catch (SQLException e) {
 	        // Manage Exception
 	        e.printStackTrace();
+	        return null;
 	    }
-	    return null;
+	    
 	}
 
 	public void addGenre(String name) {
 		    try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
-		        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO genre (is,name)")) {
+		        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO genre(name) VALUES(?)")) {
 		            statement.setString(1, name);
 		            statement.executeUpdate();
 		        }
 		    } catch (SQLException e) {
-		        // Gérer l'exception
 		        e.printStackTrace();
 		    }
 		}
